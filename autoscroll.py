@@ -1,4 +1,4 @@
-#!.autoscroll/bin/python3
+#!/home/dsibilio/python-workspace/linux-autoscroll/.autoscroll/bin/python3
 import re
 from subprocess import PIPE, Popen
 from threading import Event
@@ -70,7 +70,7 @@ def on_click(x, y, button, pressed):
         direction = 0
         interval = 0
         scroll_mode.set()
-    elif button == BUTTON_STOP and pressed and scroll_mode.is_set():
+    elif button in BUTTONS_STOP and pressed and scroll_mode.is_set():
         scroll_mode.clear()
         
 def autoscroll():
@@ -92,7 +92,7 @@ DELAY = 5
 # modify this to change the button used for entering the scroll mode
 BUTTON_START = Button.middle
 # modify this to change the button used for exiting the scroll mode
-BUTTON_STOP = Button.middle
+BUTTONS_STOP = [Button.middle, Button.left]
 # modify this to change the size (in px) of the area below and above the starting point where the scrolling is paused
 DEAD_AREA = 30
 

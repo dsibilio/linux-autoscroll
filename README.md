@@ -24,7 +24,14 @@ python3 -m pip install pynput
 chmod u+x autoscroll.py
 ```
 6. Install `xprop` (eg. `dnf install xprop`)
-7. Add the script to the list of autostart commands.
+7. Add the script to the list of autostart commands, eg. in `~/.config/autostart/discord-autoscroll.desktop`:
+```
+[Desktop Entry]
+Name=Discord Autoscroll
+Comment=Autoscroll functionality for Discord
+Exec=/home/dsibilio/python-workspace/linux-autoscroll/autoscroll.py
+Type=Application
+```
 
 ## Configuration
 
