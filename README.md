@@ -1,10 +1,10 @@
-This simple Python script gives you a Windows-like autoscroll feature on Linux. It works system-wide on every distribution with Xorg.
+This simple Python script is a specialized fork that gives you a Windows-like autoscroll feature for **Discord** on Linux. It works system-wide on every distribution with Xorg.
 
 ## Installation
 
 1. Clone the repository:
 ```
-git clone https://github.com/TWolczanski/linux-autoscroll.git
+git clone https://github.com/dsibilio/linux-autoscroll.git
 ```
 2. Create a Python virtual environment and activate it:
 ```
@@ -23,7 +23,8 @@ python3 -m pip install pynput
 ```
 chmod u+x autoscroll.py
 ```
-6. Add the script to the list of autostart commands.
+6. Install `xprop` (eg. `dnf install xprop`)
+7. Add the script to the list of autostart commands.
 
 ## Configuration
 

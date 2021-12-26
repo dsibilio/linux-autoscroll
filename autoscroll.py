@@ -1,6 +1,52 @@
-from pynput.mouse import Button, Controller, Listener
+#!.autoscroll/bin/python3
+import re
+from subprocess import PIPE, Popen
 from threading import Event
 from time import sleep
+
+from pynput.mouse import Button, Controller, Listener
+
+
+def get_activityname():
+
+    root = Popen( ['xprop', '-root', '_NET_ACTIVE_WINDOW'], stdout = PIPE )
+    stdout, stderr = root.communicate()
+    m = re.search( b'^_NET_ACTIVE_WINDOW.* ([\w]+)$', stdout )
+
+    if m is not None:
+
+        window_id   = m.group( 1 )
+
+        windowname  = None
+        window = Popen( ['xprop', '-id', window_id, 'WM_NAME'], stdout = PIPE )
+        stdout, stderr = window.communicate()
+        wmatch = re.match( b'WM_NAME\(\w+\) = (?P<name>.+)$', stdout )
+        if wmatch is not None:
+            windowname = wmatch.group( 'name' ).decode( 'UTF-8' ).strip( '"' )
+
+        processname1, processname2 = None, None
+        process = Popen( ['xprop', '-id', window_id, 'WM_CLASS'], stdout = PIPE )
+        stdout, stderr = process.communicate()
+        pmatch = re.match( b'WM_CLASS\(\w+\) = (?P<name>.+)$', stdout )
+        if pmatch is not None:
+            processname1, processname2 = pmatch.group( 'name' ).decode( 'UTF-8' ).split( ', ' )
+            processname1 = processname1.strip( '"' )
+            processname2 = processname2.strip( '"' )
+
+        return {
+            'windowname':   windowname,
+            'processname1': processname1,
+            'processname2': processname2
+            }
+
+    return {
+        'windowname':   None,
+        'processname1': None,
+        'processname2': None
+        }
+
+def is_discord():
+    return get_activityname()['processname1'] == 'discord'
 
 def on_move(x, y):
     global pos, scroll_mode, direction, interval, DELAY, DEAD_AREA
@@ -19,7 +65,7 @@ def on_move(x, y):
 
 def on_click(x, y, button, pressed):
     global pos, scroll_mode, direction, interval, BUTTON_START, BUTTON_STOP
-    if button == BUTTON_START and pressed and not scroll_mode.is_set():
+    if button == BUTTON_START and pressed and not scroll_mode.is_set() and is_discord():
         pos = (x, y)
         direction = 0
         interval = 0
